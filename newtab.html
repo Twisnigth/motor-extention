@@ -16,6 +16,256 @@
         <div class="stars"></div>
     </div>
 
+    <!-- Bouton de personnalisation (coin supérieur droit) -->
+    <button id="customizeBtn" class="customize-btn" title="Personnaliser">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="1"></circle>
+            <circle cx="19" cy="12" r="1"></circle>
+            <circle cx="5" cy="12" r="1"></circle>
+        </svg>
+    </button>
+
+    <!-- Panneau de personnalisation -->
+    <div id="customizePanel" class="customize-panel hidden">
+        <div class="customize-header">
+            <h2>Personnalisation</h2>
+            <button id="closeCustomizeBtn" class="close-customize-btn">✕</button>
+        </div>
+
+        <div class="customize-content">
+            <!-- Couleurs -->
+            <div class="customize-section">
+                <h3>🎨 Couleurs</h3>
+
+                <div class="customize-item">
+                    <label for="primaryColor">Couleur Primaire</label>
+                    <div class="color-input-group">
+                        <input type="color" id="primaryColor" class="color-input">
+                        <span class="color-value" id="primaryColorValue">#0a0e27</span>
+                    </div>
+                </div>
+
+                <div class="customize-item">
+                    <label for="accentColor">Couleur d'Accent</label>
+                    <div class="color-input-group">
+                        <input type="color" id="accentColor" class="color-input">
+                        <span class="color-value" id="accentColorValue">#6366f1</span>
+                    </div>
+                </div>
+
+                <div class="customize-item">
+                    <label for="textColor">Couleur du Texte</label>
+                    <div class="color-input-group">
+                        <input type="color" id="textColor" class="color-input">
+                        <span class="color-value" id="textColorValue">#ffffff</span>
+                    </div>
+                </div>
+
+                <div class="customize-item">
+                    <label for="secondaryColor">Couleur Secondaire</label>
+                    <div class="color-input-group">
+                        <input type="color" id="secondaryColor" class="color-input">
+                        <span class="color-value" id="secondaryColorValue">#1a1f3a</span>
+                    </div>
+                </div>
+
+                <div class="customize-item">
+                    <label for="windowColor">Couleur des Fenêtres</label>
+                    <div class="color-input-group">
+                        <input type="color" id="windowColor" class="color-input">
+                        <span class="color-value" id="windowColorValue">#1a1f3a</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Transparence des Éléments -->
+            <div class="customize-section">
+                <h3>🔍 Transparence des Éléments</h3>
+
+                <div class="customize-item">
+                    <label for="elementBgColor">Couleur de l'Arrière-plan</label>
+                    <div class="color-input-group">
+                        <input type="color" id="elementBgColor" class="color-input" value="#1a1f3a">
+                        <span class="color-value" id="elementBgColorValue">#1a1f3a</span>
+                    </div>
+                </div>
+
+                <div class="customize-item">
+                    <label for="searchBoxOpacity">Opacité de la Barre de Recherche</label>
+                    <div class="slider-group">
+                        <input type="range" id="searchBoxOpacity" min="0" max="100" value="6" class="slider">
+                        <span class="slider-value" id="searchBoxOpacityValue">6%</span>
+                    </div>
+                </div>
+
+                <div class="customize-item">
+                    <label for="shortcutOpacity">Opacité des Raccourcis</label>
+                    <div class="slider-group">
+                        <input type="range" id="shortcutOpacity" min="0" max="100" value="3" class="slider">
+                        <span class="slider-value" id="shortcutOpacityValue">3%</span>
+                    </div>
+                </div>
+
+                <div class="customize-item">
+                    <label for="buttonOpacity">Opacité des Boutons</label>
+                    <div class="slider-group">
+                        <input type="range" id="buttonOpacity" min="0" max="100" value="20" class="slider">
+                        <span class="slider-value" id="buttonOpacityValue">20%</span>
+                    </div>
+                </div>
+
+                <div class="customize-item">
+                    <label for="historyOpacity">Opacité du Panneau Historique</label>
+                    <div class="slider-group">
+                        <input type="range" id="historyOpacity" min="0" max="100" value="5" class="slider">
+                        <span class="slider-value" id="historyOpacityValue">5%</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fond d'écran -->
+            <div class="customize-section">
+                <h3>🖼️ Fond d'Écran</h3>
+
+                <div class="customize-item">
+                    <label>Type de Fond</label>
+                    <div class="radio-group">
+                        <label class="radio-label">
+                            <input type="radio" name="bgType" value="color" checked>
+                            Couleur
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="bgType" value="image">
+                            Image
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="bgType" value="slideshow">
+                            Diaporama
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Couleur de fond -->
+                <div class="customize-item" id="bgColorItem">
+                    <label for="backgroundColor">Couleur du Fond</label>
+                    <div class="color-input-group">
+                        <input type="color" id="backgroundColor" class="color-input" value="#0a0e27">
+                        <span class="color-value" id="backgroundColorValue">#0a0e27</span>
+                    </div>
+                </div>
+
+                <!-- Image de fond -->
+                <div class="customize-item hidden" id="bgImageItem">
+                    <label for="backgroundImage">Charger une Image</label>
+                    <input type="file" id="backgroundImage" accept="image/*" class="file-input">
+                    <div class="bg-preview" id="bgPreview"></div>
+                </div>
+
+                <!-- Diaporama -->
+                <div class="customize-item hidden" id="bgSlideshowItem">
+                    <label>Images du Diaporama</label>
+                    <input type="file" id="slideshowImages" accept="image/*" multiple class="file-input">
+                    <div class="slideshow-preview" id="slideshowPreview"></div>
+                    <div class="customize-item">
+                        <label for="slideshowSpeed">Vitesse du Diaporama (s)</label>
+                        <div class="slider-group">
+                            <input type="range" id="slideshowSpeed" min="1" max="10" value="5" class="slider">
+                            <span class="slider-value" id="slideshowSpeedValue">5s</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Animation du fond -->
+                <div class="customize-item">
+                    <label for="bgAnimation">Animation du Fond</label>
+                    <select id="bgAnimation" class="select-input">
+                        <option value="none">Aucune</option>
+                        <option value="flow">Flux Dégradé</option>
+                        <option value="subtle">Dynamique</option>
+                        <option value="float">Flottant</option>
+                        <option value="pulse">Pulsation</option>
+                        <option value="color">Changement de Couleur</option>
+                        <option value="breathe">Respiration</option>
+                        <option value="energetic">Énergique</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Arrondi -->
+            <div class="customize-section">
+                <h3>🔘 Arrondi des Coins</h3>
+
+                <div class="customize-item">
+                    <label for="borderRadius">Rayon d'Arrondi (px)</label>
+                    <div class="slider-group">
+                        <input type="range" id="borderRadius" min="0" max="32" value="12" class="slider">
+                        <span class="slider-value" id="borderRadiusValue">12px</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Opacité -->
+            <div class="customize-section">
+                <h3>👁️ Opacité</h3>
+
+                <div class="customize-item">
+                    <label for="bgOpacity">Opacité du Fond</label>
+                    <div class="slider-group">
+                        <input type="range" id="bgOpacity" min="0" max="100" value="95" class="slider">
+                        <span class="slider-value" id="bgOpacityValue">95%</span>
+                    </div>
+                </div>
+
+                <div class="customize-item">
+                    <label for="cardOpacity">Opacité des Cartes</label>
+                    <div class="slider-group">
+                        <input type="range" id="cardOpacity" min="0" max="100" value="3" class="slider">
+                        <span class="slider-value" id="cardOpacityValue">3%</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Animations -->
+            <div class="customize-section">
+                <h3>✨ Animations</h3>
+
+                <div class="customize-item">
+                    <label>
+                        <input type="checkbox" id="enableAnimations" checked>
+                        Activer les animations
+                    </label>
+                </div>
+
+                <div class="customize-item">
+                    <label for="animationSpeed">Vitesse des Animations</label>
+                    <div class="slider-group">
+                        <input type="range" id="animationSpeed" min="0.5" max="2" step="0.1" value="1" class="slider">
+                        <span class="slider-value" id="animationSpeedValue">1x</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Présets -->
+            <div class="customize-section">
+                <h3>🎯 Présets</h3>
+                <div class="presets-grid">
+                    <button class="preset-btn" data-preset="dark">🌙 Sombre</button>
+                    <button class="preset-btn" data-preset="light">☀️ Clair</button>
+                    <button class="preset-btn" data-preset="purple">💜 Violet</button>
+                    <button class="preset-btn" data-preset="ocean">🌊 Océan</button>
+                </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="customize-section">
+                <div class="customize-actions">
+                    <button id="resetCustomizeBtn" class="btn-secondary">Réinitialiser</button>
+                    <button id="exportCustomizeBtn" class="btn-secondary">Exporter</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Conteneur principal -->
     <div class="container">
         <!-- Barre de recherche Google -->

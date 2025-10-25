@@ -17,12 +17,160 @@ let saveShortcutBtn;
 let shortcutNameInput;
 let shortcutUrlInput;
 
+// Éléments de personnalisation
+let customizeBtn;
+let customizePanel;
+let closeCustomizeBtn;
+let primaryColorInput;
+let accentColorInput;
+let textColorInput;
+let secondaryColorInput;
+let borderRadiusInput;
+let bgOpacityInput;
+let cardOpacityInput;
+let enableAnimationsInput;
+let animationSpeedInput;
+let resetCustomizeBtn;
+let exportCustomizeBtn;
+let presetBtns;
+
+// Éléments de fond d'écran
+let bgTypeRadios;
+let bgColorItem;
+let bgImageItem;
+let bgSlideshowItem;
+let backgroundColorInput;
+let backgroundImageInput;
+let slideshowImagesInput;
+let slideshowSpeedInput;
+let bgAnimationSelect;
+let bgPreview;
+let slideshowPreview;
+
+// Éléments de transparence
+let elementBgColorInput;
+let searchBoxOpacityInput;
+let shortcutOpacityInput;
+let buttonOpacityInput;
+let historyOpacityInput;
+
 // État
 let topSites = [];
 let geminiHideTimeout;
 let searchTimeout;
 let historyData = {}; // Historique groupé par domaine
 let shortcuts = []; // Raccourcis personnalisés
+
+// Configuration de personnalisation par défaut
+const defaultTheme = {
+    primaryColor: '#0a0e27',
+    accentColor: '#6366f1',
+    textColor: '#ffffff',
+    secondaryColor: '#1a1f3a',
+    windowColor: '#1a1f3a',
+    borderRadius: 12,
+    bgOpacity: 95,
+    cardOpacity: 3,
+    enableAnimations: true,
+    animationSpeed: 1,
+    bgType: 'color',
+    backgroundColor: '#0a0e27',
+    backgroundImage: null,
+    slideshowImages: [],
+    slideshowSpeed: 5,
+    bgAnimation: 'flow',
+    elementBgColor: '#1a1f3a',
+    searchBoxOpacity: 6,
+    shortcutOpacity: 3,
+    buttonOpacity: 20,
+    historyOpacity: 5
+};
+
+// Thèmes prédéfinis
+const presets = {
+    dark: {
+        primaryColor: '#0a0e27',
+        accentColor: '#6366f1',
+        textColor: '#ffffff',
+        secondaryColor: '#1a1f3a',
+        windowColor: '#1a1f3a',
+        borderRadius: 12,
+        bgOpacity: 95,
+        cardOpacity: 3,
+        enableAnimations: true,
+        animationSpeed: 1,
+        bgType: 'color',
+        backgroundColor: '#0a0e27',
+        bgAnimation: 'flow',
+        elementBgColor: '#1a1f3a',
+        searchBoxOpacity: 6,
+        shortcutOpacity: 3,
+        buttonOpacity: 20,
+        historyOpacity: 5
+    },
+    light: {
+        primaryColor: '#ffffff',
+        accentColor: '#3b82f6',
+        textColor: '#1f2937',
+        secondaryColor: '#f3f4f6',
+        windowColor: '#f3f4f6',
+        borderRadius: 12,
+        bgOpacity: 100,
+        cardOpacity: 10,
+        enableAnimations: true,
+        animationSpeed: 1,
+        bgType: 'color',
+        backgroundColor: '#ffffff',
+        bgAnimation: 'subtle',
+        elementBgColor: '#f3f4f6',
+        searchBoxOpacity: 15,
+        shortcutOpacity: 10,
+        buttonOpacity: 30,
+        historyOpacity: 12
+    },
+    purple: {
+        primaryColor: '#1a0033',
+        accentColor: '#c084fc',
+        textColor: '#f3e8ff',
+        secondaryColor: '#3d1a66',
+        windowColor: '#3d1a66',
+        borderRadius: 16,
+        bgOpacity: 95,
+        cardOpacity: 5,
+        enableAnimations: true,
+        animationSpeed: 1,
+        bgType: 'color',
+        backgroundColor: '#1a0033',
+        bgAnimation: 'color',
+        elementBgColor: '#3d1a66',
+        searchBoxOpacity: 8,
+        shortcutOpacity: 5,
+        buttonOpacity: 25,
+        historyOpacity: 6
+    },
+    ocean: {
+        primaryColor: '#001a33',
+        accentColor: '#06b6d4',
+        textColor: '#e0f2fe',
+        secondaryColor: '#003d66',
+        windowColor: '#003d66',
+        borderRadius: 12,
+        bgOpacity: 95,
+        cardOpacity: 3,
+        enableAnimations: true,
+        animationSpeed: 1,
+        bgType: 'color',
+        backgroundColor: '#001a33',
+        bgAnimation: 'breathe',
+        elementBgColor: '#003d66',
+        searchBoxOpacity: 7,
+        shortcutOpacity: 4,
+        buttonOpacity: 22,
+        historyOpacity: 5
+    }
+};
+
+let currentTheme = { ...defaultTheme };
 
 // Initialisation
 document.addEventListener('DOMContentLoaded', () => {
@@ -45,12 +193,50 @@ document.addEventListener('DOMContentLoaded', () => {
     shortcutNameInput = document.getElementById('shortcutName');
     shortcutUrlInput = document.getElementById('shortcutUrl');
 
+    // Initialiser les éléments de personnalisation
+    customizeBtn = document.getElementById('customizeBtn');
+    customizePanel = document.getElementById('customizePanel');
+    closeCustomizeBtn = document.getElementById('closeCustomizeBtn');
+    primaryColorInput = document.getElementById('primaryColor');
+    accentColorInput = document.getElementById('accentColor');
+    textColorInput = document.getElementById('textColor');
+    secondaryColorInput = document.getElementById('secondaryColor');
+    borderRadiusInput = document.getElementById('borderRadius');
+    bgOpacityInput = document.getElementById('bgOpacity');
+    cardOpacityInput = document.getElementById('cardOpacity');
+    enableAnimationsInput = document.getElementById('enableAnimations');
+    animationSpeedInput = document.getElementById('animationSpeed');
+    resetCustomizeBtn = document.getElementById('resetCustomizeBtn');
+    exportCustomizeBtn = document.getElementById('exportCustomizeBtn');
+    presetBtns = document.querySelectorAll('.preset-btn');
+
+    // Initialiser les éléments de fond d'écran
+    bgTypeRadios = document.querySelectorAll('input[name="bgType"]');
+    bgColorItem = document.getElementById('bgColorItem');
+    bgImageItem = document.getElementById('bgImageItem');
+    bgSlideshowItem = document.getElementById('bgSlideshowItem');
+    backgroundColorInput = document.getElementById('backgroundColor');
+    backgroundImageInput = document.getElementById('backgroundImage');
+    slideshowImagesInput = document.getElementById('slideshowImages');
+    slideshowSpeedInput = document.getElementById('slideshowSpeed');
+    bgAnimationSelect = document.getElementById('bgAnimation');
+    bgPreview = document.getElementById('bgPreview');
+    slideshowPreview = document.getElementById('slideshowPreview');
+
+    // Initialiser les éléments de transparence
+    elementBgColorInput = document.getElementById('elementBgColor');
+    searchBoxOpacityInput = document.getElementById('searchBoxOpacity');
+    shortcutOpacityInput = document.getElementById('shortcutOpacity');
+    buttonOpacityInput = document.getElementById('buttonOpacity');
+    historyOpacityInput = document.getElementById('historyOpacity');
+
     // Vérifier que tous les éléments existent
     if (!geminiButton || !searchContainer || !searchInput) {
         console.error('Éléments DOM manquants');
         return;
     }
 
+    loadTheme();
     loadShortcuts();
     loadHistoryData();
     setupKeyboardShortcuts();
@@ -58,6 +244,7 @@ document.addEventListener('DOMContentLoaded', () => {
     setupSearchInput();
     setupHistoryPanel();
     setupShortcutsModal();
+    setupCustomizePanel();
 });
 
 // Configuration du bouton Gemini avec délai de disparition
@@ -1191,5 +1378,557 @@ function setupShortcutsModal() {
             saveShortcutBtn.click();
         }
     });
+}
+
+// ============================================
+// GESTION DE LA PERSONNALISATION
+// ============================================
+
+function setupCustomizePanel() {
+    if (!customizeBtn || !customizePanel) return;
+
+    // Ouvrir le panneau
+    customizeBtn.addEventListener('click', () => {
+        customizePanel.classList.remove('hidden');
+        updateCustomizeInputs();
+    });
+
+    // Fermer le panneau
+    closeCustomizeBtn.addEventListener('click', () => {
+        customizePanel.classList.add('hidden');
+    });
+
+    // Fermer en cliquant en dehors
+    document.addEventListener('click', (e) => {
+        if (!customizePanel.contains(e.target) && !customizeBtn.contains(e.target)) {
+            customizePanel.classList.add('hidden');
+        }
+    });
+
+    // Couleurs
+    primaryColorInput.addEventListener('input', (e) => {
+        currentTheme.primaryColor = e.target.value;
+        document.getElementById('primaryColorValue').textContent = e.target.value;
+        applyTheme();
+        saveTheme();
+    });
+
+    accentColorInput.addEventListener('input', (e) => {
+        currentTheme.accentColor = e.target.value;
+        document.getElementById('accentColorValue').textContent = e.target.value;
+        applyTheme();
+        saveTheme();
+    });
+
+    textColorInput.addEventListener('input', (e) => {
+        currentTheme.textColor = e.target.value;
+        document.getElementById('textColorValue').textContent = e.target.value;
+        applyTheme();
+        saveTheme();
+    });
+
+    secondaryColorInput.addEventListener('input', (e) => {
+        currentTheme.secondaryColor = e.target.value;
+        document.getElementById('secondaryColorValue').textContent = e.target.value;
+        applyTheme();
+        saveTheme();
+    });
+
+    // Couleur des fenêtres
+    const windowColorInput = document.getElementById('windowColor');
+    if (windowColorInput) {
+        windowColorInput.addEventListener('input', (e) => {
+            currentTheme.windowColor = e.target.value;
+            document.getElementById('windowColorValue').textContent = e.target.value;
+            applyTheme();
+            saveTheme();
+        });
+    }
+
+    // Gestion du type de fond
+    bgTypeRadios.forEach(radio => {
+        radio.addEventListener('change', (e) => {
+            currentTheme.bgType = e.target.value;
+            updateBgTypeUI();
+            applyTheme();
+            saveTheme();
+        });
+    });
+
+    // Couleur de fond
+    backgroundColorInput.addEventListener('input', (e) => {
+        currentTheme.backgroundColor = e.target.value;
+        document.getElementById('backgroundColorValue').textContent = e.target.value;
+        applyTheme();
+        saveTheme();
+    });
+
+    // Image de fond
+    backgroundImageInput.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            // Vérifier la taille du fichier (max 5MB)
+            if (file.size > 5 * 1024 * 1024) {
+                alert('L\'image est trop grande (max 5MB)');
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                try {
+                    const imageData = event.target.result;
+                    currentTheme.backgroundImage = imageData;
+                    currentTheme.bgType = 'image'; // Changer le type de fond à 'image'
+                    bgPreview.style.backgroundImage = `url('${imageData}')`;
+                    bgPreview.style.backgroundSize = 'cover';
+                    bgPreview.style.backgroundPosition = 'center';
+                    updateBgTypeUI(); // Mettre à jour l'UI
+                    applyTheme();
+                    saveTheme();
+                    console.log('Image chargée avec succès');
+                } catch (error) {
+                    console.error('Erreur lors du chargement de l\'image:', error);
+                    alert('Erreur lors du chargement de l\'image');
+                }
+            };
+            reader.onerror = () => {
+                console.error('Erreur lors de la lecture du fichier');
+                alert('Erreur lors de la lecture du fichier');
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+
+    // Diaporama
+    slideshowImagesInput.addEventListener('change', (e) => {
+        const files = Array.from(e.target.files);
+        currentTheme.slideshowImages = [];
+        slideshowPreview.innerHTML = '';
+
+        files.forEach((file, index) => {
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                currentTheme.slideshowImages.push(event.target.result);
+
+                const preview = document.createElement('div');
+                preview.className = 'slideshow-preview-item';
+                preview.style.backgroundImage = `url(${event.target.result})`;
+
+                const removeBtn = document.createElement('button');
+                removeBtn.className = 'remove-btn';
+                removeBtn.textContent = '✕';
+                removeBtn.addEventListener('click', () => {
+                    currentTheme.slideshowImages.splice(index, 1);
+                    preview.remove();
+                    saveTheme();
+                });
+
+                preview.appendChild(removeBtn);
+                slideshowPreview.appendChild(preview);
+
+                if (currentTheme.slideshowImages.length === files.length) {
+                    currentTheme.bgType = 'slideshow'; // Changer le type de fond à 'slideshow'
+                    updateBgTypeUI(); // Mettre à jour l'UI
+                    applyTheme();
+                    saveTheme();
+                }
+            };
+            reader.readAsDataURL(file);
+        });
+    });
+
+    // Vitesse du diaporama
+    slideshowSpeedInput.addEventListener('input', (e) => {
+        currentTheme.slideshowSpeed = parseInt(e.target.value);
+        document.getElementById('slideshowSpeedValue').textContent = e.target.value + 's';
+        saveTheme();
+    });
+
+    // Animation du fond
+    bgAnimationSelect.addEventListener('change', (e) => {
+        currentTheme.bgAnimation = e.target.value;
+        applyTheme();
+        saveTheme();
+    });
+
+    // Couleur de l'arrière-plan des éléments
+    if (elementBgColorInput) {
+        elementBgColorInput.addEventListener('input', (e) => {
+            currentTheme.elementBgColor = e.target.value;
+            document.getElementById('elementBgColorValue').textContent = e.target.value;
+            applyTheme();
+            saveTheme();
+        });
+    }
+
+    // Transparence des éléments
+    searchBoxOpacityInput.addEventListener('input', (e) => {
+        currentTheme.searchBoxOpacity = parseInt(e.target.value);
+        document.getElementById('searchBoxOpacityValue').textContent = e.target.value + '%';
+        applyTheme();
+        saveTheme();
+    });
+
+    shortcutOpacityInput.addEventListener('input', (e) => {
+        currentTheme.shortcutOpacity = parseInt(e.target.value);
+        document.getElementById('shortcutOpacityValue').textContent = e.target.value + '%';
+        applyTheme();
+        saveTheme();
+    });
+
+    buttonOpacityInput.addEventListener('input', (e) => {
+        currentTheme.buttonOpacity = parseInt(e.target.value);
+        document.getElementById('buttonOpacityValue').textContent = e.target.value + '%';
+        applyTheme();
+        saveTheme();
+    });
+
+    historyOpacityInput.addEventListener('input', (e) => {
+        currentTheme.historyOpacity = parseInt(e.target.value);
+        document.getElementById('historyOpacityValue').textContent = e.target.value + '%';
+        applyTheme();
+        saveTheme();
+    });
+
+    // Arrondi
+    borderRadiusInput.addEventListener('input', (e) => {
+        currentTheme.borderRadius = parseInt(e.target.value);
+        document.getElementById('borderRadiusValue').textContent = e.target.value + 'px';
+        applyTheme();
+        saveTheme();
+    });
+
+    // Opacité
+    bgOpacityInput.addEventListener('input', (e) => {
+        currentTheme.bgOpacity = parseInt(e.target.value);
+        document.getElementById('bgOpacityValue').textContent = e.target.value + '%';
+        applyTheme();
+        saveTheme();
+    });
+
+    cardOpacityInput.addEventListener('input', (e) => {
+        currentTheme.cardOpacity = parseInt(e.target.value);
+        document.getElementById('cardOpacityValue').textContent = e.target.value + '%';
+        applyTheme();
+        saveTheme();
+    });
+
+    // Animations
+    enableAnimationsInput.addEventListener('change', (e) => {
+        currentTheme.enableAnimations = e.target.checked;
+        applyTheme();
+        saveTheme();
+    });
+
+    animationSpeedInput.addEventListener('input', (e) => {
+        currentTheme.animationSpeed = parseFloat(e.target.value);
+        document.getElementById('animationSpeedValue').textContent = e.target.value + 'x';
+        applyTheme();
+        saveTheme();
+    });
+
+    // Présets
+    presetBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const preset = btn.dataset.preset;
+            if (presets[preset]) {
+                currentTheme = { ...presets[preset] };
+                updateCustomizeInputs();
+                applyTheme();
+                saveTheme();
+            }
+        });
+    });
+
+    // Réinitialiser
+    resetCustomizeBtn.addEventListener('click', () => {
+        currentTheme = { ...defaultTheme };
+        updateCustomizeInputs();
+        applyTheme();
+        saveTheme();
+    });
+
+    // Exporter
+    exportCustomizeBtn.addEventListener('click', () => {
+        const json = JSON.stringify(currentTheme, null, 2);
+        const blob = new Blob([json], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'spotlight-theme.json';
+        a.click();
+        URL.revokeObjectURL(url);
+    });
+}
+
+function updateBgTypeUI() {
+    const bgType = currentTheme.bgType || 'color'; // Valeur par défaut
+
+    if (bgColorItem) bgColorItem.classList.toggle('hidden', bgType !== 'color');
+    if (bgImageItem) bgImageItem.classList.toggle('hidden', bgType !== 'image');
+    if (bgSlideshowItem) bgSlideshowItem.classList.toggle('hidden', bgType !== 'slideshow');
+
+    // Mettre à jour le radio sélectionné
+    const radio = document.querySelector(`input[name="bgType"][value="${bgType}"]`);
+    if (radio) {
+        radio.checked = true;
+    }
+}
+
+function updateCustomizeInputs() {
+    primaryColorInput.value = currentTheme.primaryColor;
+    document.getElementById('primaryColorValue').textContent = currentTheme.primaryColor;
+
+    accentColorInput.value = currentTheme.accentColor;
+    document.getElementById('accentColorValue').textContent = currentTheme.accentColor;
+
+    textColorInput.value = currentTheme.textColor;
+    document.getElementById('textColorValue').textContent = currentTheme.textColor;
+
+    secondaryColorInput.value = currentTheme.secondaryColor;
+    document.getElementById('secondaryColorValue').textContent = currentTheme.secondaryColor;
+
+    const windowColorInput = document.getElementById('windowColor');
+    if (windowColorInput) {
+        windowColorInput.value = currentTheme.windowColor;
+        document.getElementById('windowColorValue').textContent = currentTheme.windowColor;
+    }
+
+    borderRadiusInput.value = currentTheme.borderRadius;
+    document.getElementById('borderRadiusValue').textContent = currentTheme.borderRadius + 'px';
+
+    bgOpacityInput.value = currentTheme.bgOpacity;
+    document.getElementById('bgOpacityValue').textContent = currentTheme.bgOpacity + '%';
+
+    cardOpacityInput.value = currentTheme.cardOpacity;
+    document.getElementById('cardOpacityValue').textContent = currentTheme.cardOpacity + '%';
+
+    enableAnimationsInput.checked = currentTheme.enableAnimations;
+
+    animationSpeedInput.value = currentTheme.animationSpeed;
+    document.getElementById('animationSpeedValue').textContent = currentTheme.animationSpeed + 'x';
+
+    // Fond d'écran
+    updateBgTypeUI();
+    backgroundColorInput.value = currentTheme.backgroundColor;
+    document.getElementById('backgroundColorValue').textContent = currentTheme.backgroundColor;
+
+    if (currentTheme.backgroundImage) {
+        bgPreview.style.backgroundImage = `url(${currentTheme.backgroundImage})`;
+    }
+
+    slideshowSpeedInput.value = currentTheme.slideshowSpeed;
+    document.getElementById('slideshowSpeedValue').textContent = currentTheme.slideshowSpeed + 's';
+
+    bgAnimationSelect.value = currentTheme.bgAnimation;
+
+    // Couleur de l'opacité
+    if (elementBgColorInput) {
+        elementBgColorInput.value = currentTheme.elementBgColor;
+        document.getElementById('elementBgColorValue').textContent = currentTheme.elementBgColor;
+    }
+
+    // Transparence
+    searchBoxOpacityInput.value = currentTheme.searchBoxOpacity;
+    document.getElementById('searchBoxOpacityValue').textContent = currentTheme.searchBoxOpacity + '%';
+
+    shortcutOpacityInput.value = currentTheme.shortcutOpacity;
+    document.getElementById('shortcutOpacityValue').textContent = currentTheme.shortcutOpacity + '%';
+
+    buttonOpacityInput.value = currentTheme.buttonOpacity;
+    document.getElementById('buttonOpacityValue').textContent = currentTheme.buttonOpacity + '%';
+
+    historyOpacityInput.value = currentTheme.historyOpacity;
+    document.getElementById('historyOpacityValue').textContent = currentTheme.historyOpacity + '%';
+}
+
+// Fonction pour convertir hex en rgba
+function hexToRgba(hex, alpha) {
+    try {
+        // Vérifier que hex est valide
+        if (!hex || hex.length < 7) {
+            console.warn('Couleur hex invalide:', hex);
+            return `rgba(26, 31, 58, ${alpha})`;
+        }
+
+        const r = parseInt(hex.slice(1, 3), 16);
+        const g = parseInt(hex.slice(3, 5), 16);
+        const b = parseInt(hex.slice(5, 7), 16);
+
+        // Vérifier que les valeurs sont valides
+        if (isNaN(r) || isNaN(g) || isNaN(b)) {
+            console.warn('Erreur de conversion hex:', hex);
+            return `rgba(26, 31, 58, ${alpha})`;
+        }
+
+        return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+    } catch (error) {
+        console.error('Erreur dans hexToRgba:', error);
+        return `rgba(26, 31, 58, ${alpha})`;
+    }
+}
+
+function applyTheme() {
+    const root = document.documentElement;
+
+    root.style.setProperty('--primary-color', currentTheme.primaryColor);
+    root.style.setProperty('--accent-color', currentTheme.accentColor);
+    root.style.setProperty('--text-primary', currentTheme.textColor);
+    root.style.setProperty('--secondary-color', currentTheme.secondaryColor);
+    root.style.setProperty('--window-color', currentTheme.windowColor);
+    root.style.setProperty('--element-bg-color', currentTheme.elementBgColor);
+    root.style.setProperty('--border-radius', currentTheme.borderRadius + 'px');
+    root.style.setProperty('--bg-opacity', currentTheme.bgOpacity + '%');
+    root.style.setProperty('--card-opacity', currentTheme.cardOpacity + '%');
+
+    // Appliquer la transparence des éléments avec les couleurs
+    const elementBgColor = currentTheme.elementBgColor || defaultTheme.elementBgColor;
+    const searchBoxAlpha = (currentTheme.searchBoxOpacity / 100).toFixed(2);
+    const shortcutAlpha = (currentTheme.shortcutOpacity / 100).toFixed(2);
+    const buttonAlpha = (currentTheme.buttonOpacity / 100).toFixed(2);
+    const historyAlpha = (currentTheme.historyOpacity / 100).toFixed(2);
+
+    root.style.setProperty('--search-box-bg', hexToRgba(elementBgColor, searchBoxAlpha));
+    root.style.setProperty('--shortcut-bg', hexToRgba(elementBgColor, shortcutAlpha));
+    root.style.setProperty('--button-bg', hexToRgba(elementBgColor, buttonAlpha));
+    root.style.setProperty('--history-bg', hexToRgba(elementBgColor, historyAlpha));
+
+    // Garder les anciennes variables pour compatibilité
+    root.style.setProperty('--search-box-opacity', searchBoxAlpha);
+    root.style.setProperty('--shortcut-opacity', shortcutAlpha);
+    root.style.setProperty('--button-opacity', buttonAlpha);
+    root.style.setProperty('--history-opacity', historyAlpha);
+
+    if (!currentTheme.enableAnimations) {
+        document.documentElement.style.setProperty('--animation-duration', '0s');
+    } else {
+        document.documentElement.style.setProperty('--animation-duration', (1 / currentTheme.animationSpeed) + 's');
+    }
+
+    // Appliquer le fond d'écran
+    const gradientBg = document.querySelector('.gradient-bg');
+    if (gradientBg) {
+        // Supprimer toutes les animations précédentes
+        gradientBg.classList.remove('none', 'flow', 'subtle', 'float', 'pulse', 'color', 'breathe', 'energetic');
+
+        if (currentTheme.bgType === 'color') {
+            gradientBg.style.background = currentTheme.backgroundColor;
+            gradientBg.style.backgroundImage = 'none';
+            gradientBg.style.backgroundSize = 'auto';
+            gradientBg.style.backgroundPosition = 'auto';
+
+            // Ajouter l'animation si elle est activée
+            if (currentTheme.enableAnimations && currentTheme.bgAnimation !== 'none') {
+                gradientBg.classList.add(currentTheme.bgAnimation);
+            } else {
+                gradientBg.classList.add('none');
+            }
+        } else if (currentTheme.bgType === 'image' && currentTheme.backgroundImage) {
+            try {
+                // Utiliser backgroundImage avec url() correctement formaté
+                gradientBg.style.backgroundImage = `url('${currentTheme.backgroundImage}')`;
+                gradientBg.style.backgroundSize = 'cover';
+                gradientBg.style.backgroundPosition = 'center';
+                gradientBg.style.backgroundAttachment = 'fixed';
+                // NE PAS écraser backgroundImage avec background !
+                gradientBg.style.backgroundColor = 'transparent';
+
+                if (currentTheme.enableAnimations && currentTheme.bgAnimation !== 'none') {
+                    gradientBg.classList.add(currentTheme.bgAnimation);
+                } else {
+                    gradientBg.classList.add('none');
+                }
+            } catch (error) {
+                console.error('Erreur lors de l\'application de l\'image:', error);
+                // Fallback à la couleur
+                gradientBg.style.background = currentTheme.backgroundColor;
+                gradientBg.style.backgroundImage = 'none';
+            }
+        } else if (currentTheme.bgType === 'slideshow' && currentTheme.slideshowImages.length > 0) {
+            startSlideshow(gradientBg);
+        }
+    }
+}
+
+function saveTheme() {
+    // Sauvegarder le thème sans les images (trop volumineux pour sync)
+    const themeToSave = { ...currentTheme };
+
+    // Sauvegarder les images dans le stockage local
+    if (currentTheme.backgroundImage) {
+        chrome.storage.local.set({ 'backgroundImage': currentTheme.backgroundImage });
+        themeToSave.backgroundImage = null;
+    }
+
+    if (currentTheme.slideshowImages && currentTheme.slideshowImages.length > 0) {
+        chrome.storage.local.set({ 'slideshowImages': currentTheme.slideshowImages });
+        themeToSave.slideshowImages = [];
+    }
+
+    // Sauvegarder le thème dans le stockage sync
+    chrome.storage.sync.set({ 'theme': themeToSave });
+}
+
+function loadTheme() {
+    chrome.storage.sync.get(['theme'], (result) => {
+        if (result.theme) {
+            currentTheme = result.theme;
+        }
+
+        // Ajouter les propriétés manquantes si elles n'existent pas
+        if (!currentTheme.elementBgColor) {
+            currentTheme.elementBgColor = defaultTheme.elementBgColor;
+        }
+
+        // Charger les images depuis le stockage local
+        chrome.storage.local.get(['backgroundImage', 'slideshowImages'], (localResult) => {
+            if (localResult.backgroundImage) {
+                currentTheme.backgroundImage = localResult.backgroundImage;
+            }
+
+            if (localResult.slideshowImages && localResult.slideshowImages.length > 0) {
+                currentTheme.slideshowImages = localResult.slideshowImages;
+            }
+
+            applyTheme();
+        });
+    });
+}
+
+let slideshowInterval;
+
+function startSlideshow(element) {
+    if (!element || !currentTheme.slideshowImages || currentTheme.slideshowImages.length === 0) {
+        return;
+    }
+
+    let currentIndex = 0;
+
+    // Fonction pour afficher une image
+    const showImage = (index) => {
+        try {
+            const imageUrl = currentTheme.slideshowImages[index];
+            element.style.backgroundImage = `url('${imageUrl}')`;
+            element.style.backgroundSize = 'cover';
+            element.style.backgroundPosition = 'center';
+            element.style.backgroundAttachment = 'fixed';
+        } catch (error) {
+            console.error('Erreur lors de l\'affichage de l\'image:', error);
+        }
+    };
+
+    // Afficher la première image
+    showImage(0);
+
+    // Arrêter l'intervalle précédent s'il existe
+    if (slideshowInterval) {
+        clearInterval(slideshowInterval);
+    }
+
+    // Démarrer le diaporama
+    slideshowInterval = setInterval(() => {
+        currentIndex = (currentIndex + 1) % currentTheme.slideshowImages.length;
+        showImage(currentIndex);
+    }, currentTheme.slideshowSpeed * 1000);
 }
 
