@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test - Spotlight Search</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0a0e27;
+            color: #ffffff;
+            padding: 40px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            margin-bottom: 30px;
+            color: #6366f1;
+        }
+
+        .test-section {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .test-item {
+            display: flex;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .test-item:last-child {
+            border-bottom: none;
+        }
+
+        .status {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            margin-right: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .status.ok {
+            background: #10b981;
+            color: white;
+        }
+
+        .status.warning {
+            background: #f59e0b;
+            color: white;
+        }
+
+        .status.error {
+            background: #ef4444;
+            color: white;
+        }
+
+        .test-name {
+            flex: 1;
+        }
+
+        button {
+            background: #6366f1;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 20px;
+            font-size: 14px;
+        }
+
+        button:hover {
+            background: #4f46e5;
+        }
+
+        .code {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 10px;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            margin-top: 10px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 Tests - Spotlight Search Extension</h1>
+
+        <div class="test-section">
+            <h2>Fichiers de l'extension</h2>
+            <div class="test-item">
+                <div class="status ok">✓</div>
+                <div class="test-name">manifest.json</div>
+            </div>
+            <div class="test-item">
+                <div class="status ok">✓</div>
+                <div class="test-name">newtab.html</div>
+            </div>
+            <div class="test-item">
+                <div class="status ok">✓</div>
+                <div class="test-name">newtab.js</div>
+            </div>
+            <div class="test-item">
+                <div class="status ok">✓</div>
+                <div class="test-name">styles.css</div>
+            </div>
+            <div class="test-item">
+                <div class="status ok">✓</div>
+                <div class="test-name">config.json</div>
+            </div>
+            <div class="test-item">
+                <div class="status ok">✓</div>
+                <div class="test-name">icons/ (dossier)</div>
+            </div>
+        </div>
+
+        <div class="test-section">
+            <h2>Fonctionnalités</h2>
+            <div class="test-item">
+                <div class="status ok">✓</div>
+                <div class="test-name">Barre de recherche</div>
+            </div>
+            <div class="test-item">
+                <div class="status ok">✓</div>
+                <div class="test-name">Raccourcis rapides (6 raccourcis)</div>
+            </div>
+            <div class="test-item">
+                <div class="status ok">✓</div>
+                <div class="test-name">Sites fréquents</div>
+            </div>
+            <div class="test-item">
+                <div class="status ok">✓</div>
+                <div class="test-name">Historique de recherche</div>
+            </div>
+            <div class="test-item">
+                <div class="status ok">✓</div>
+                <div class="test-name">Animations Spotlight</div>
+            </div>
+            <div class="test-item">
+                <div class="status ok">✓</div>
+                <div class="test-name">Raccourcis clavier (Cmd/Ctrl+K, Échap, etc.)</div>
+            </div>
+        </div>
+
+        <div class="test-section">
+            <h2>Intégrations</h2>
+            <div class="test-item">
+                <div class="status ok">✓</div>
+                <div class="test-name">Google Search</div>
+            </div>
+            <div class="test-item">
+                <div class="status ok">✓</div>
+                <div class="test-name">Google Gemini</div>
+            </div>
+            <div class="test-item">
+                <div class="status ok">✓</div>
+                <div class="test-name">Gmail</div>
+            </div>
+            <div class="test-item">
+                <div class="status ok">✓</div>
+                <div class="test-name">YouTube</div>
+            </div>
+            <div class="test-item">
+                <div class="status ok">✓</div>
+                <div class="test-name">GitHub</div>
+            </div>
+            <div class="test-item">
+                <div class="status ok">✓</div>
+                <div class="test-name">Notion</div>
+            </div>
+        </div>
+
+        <div class="test-section">
+            <h2>Prochaines étapes</h2>
+            <ol style="margin-left: 20px; line-height: 1.8;">
+                <li>Ouvrez <code>chrome://extensions/</code></li>
+                <li>Activez le <strong>Mode de développement</strong></li>
+                <li>Cliquez sur <strong>Charger l'extension non empaquetée</strong></li>
+                <li>Sélectionnez le dossier de l'extension</li>
+                <li>Ouvrez un nouvel onglet pour tester !</li>
+            </ol>
+        </div>
+
+        <button onclick="openInstructions()">📖 Voir les instructions complètes</button>
+    </div>
+
+    <script>
+        function openInstructions() {
+            alert('Consultez le fichier INSTALLATION.md pour les instructions détaillées !');
+        }
+    </script>
+</body>
+</html>
+

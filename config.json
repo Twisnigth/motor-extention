@@ -1,0 +1,48 @@
+{
+  "shortcuts": [
+    {
+      "name": "Google",
+      "url": "https://www.google.com",
+      "icon": "🔍"
+    },
+    {
+      "name": "Gemini",
+      "url": "https://gemini.google.com",
+      "icon": "✨"
+    },
+    {
+      "name": "Gmail",
+      "url": "https://mail.google.com",
+      "icon": "📧"
+    },
+    {
+      "name": "YouTube",
+      "url": "https://www.youtube.com",
+      "icon": "▶️"
+    },
+    {
+      "name": "GitHub",
+      "url": "https://github.com",
+      "icon": "🐙"
+    },
+    {
+      "name": "Notion",
+      "url": "https://www.notion.so",
+      "icon": "📝"
+    }
+  ],
+  "theme": {
+    "primaryColor": "#0a0e27",
+    "secondaryColor": "#1a1f3a",
+    "accentColor": "#6366f1",
+    "textPrimary": "#ffffff",
+    "textSecondary": "#a0aec0"
+  },
+  "features": {
+    "showFrequentSites": true,
+    "showSearchHistory": true,
+    "enableKeyboardShortcuts": true,
+    "blurBackground": true
+  }
+}
+

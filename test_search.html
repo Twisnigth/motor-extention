@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Spotlight Search</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            background: #0f0f1e;
+            color: #fff;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            padding: 20px;
+        }
+        .test-container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .test-section {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .test-section h2 {
+            margin-top: 0;
+            color: #6366f1;
+        }
+        .test-input {
+            width: 100%;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: #fff;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+        .test-results {
+            margin-top: 10px;
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            background: rgba(0, 0, 0, 0.3);
+        }
+        .test-result-item {
+            padding: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            cursor: pointer;
+        }
+        .test-result-item:hover {
+            background: rgba(99, 102, 241, 0.1);
+        }
+        .test-status {
+            padding: 10px;
+            border-radius: 6px;
+            margin-top: 10px;
+            font-size: 12px;
+        }
+        .test-status.success {
+            background: rgba(34, 197, 94, 0.2);
+            color: #22c55e;
+        }
+        .test-status.error {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+        }
+        .test-status.info {
+            background: rgba(59, 130, 246, 0.2);
+            color: #3b82f6;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>🧪 Test Spotlight Search</h1>
+        
+        <div class="test-section">
+            <h2>Test 1: Historique</h2>
+            <input type="text" class="test-input" id="historyInput" placeholder="Tapez pour chercher dans l'historique...">
+            <div class="test-results" id="historyResults"></div>
+            <div class="test-status info" id="historyStatus">En attente...</div>
+        </div>
+
+        <div class="test-section">
+            <h2>Test 2: Signets</h2>
+            <input type="text" class="test-input" id="bookmarkInput" placeholder="Tapez pour chercher dans les signets...">
+            <div class="test-results" id="bookmarkResults"></div>
+            <div class="test-status info" id="bookmarkStatus">En attente...</div>
+        </div>
+
+        <div class="test-section">
+            <h2>Test 3: Icônes</h2>
+            <div id="iconTest"></div>
+            <div class="test-status info" id="iconStatus">En attente...</div>
+        </div>
+
+        <div class="test-section">
+            <h2>Test 4: Permissions Chrome</h2>
+            <div id="permissionStatus"></div>
+        </div>
+    </div>
+
+    <script>
+        // Test 1: Historique
+        document.getElementById('historyInput').addEventListener('input', (e) => {
+            const query = e.target.value.trim();
+            if (query.length === 0) {
+                document.getElementById('historyResults').innerHTML = '';
+                return;
+            }
+
+            chrome.history.search({ text: query, maxResults: 5 }, (results) => {
+                const resultsDiv = document.getElementById('historyResults');
+                resultsDiv.innerHTML = '';
+
+                if (results && results.length > 0) {
+                    document.getElementById('historyStatus').textContent = `✅ ${results.length} résultats trouvés`;
+                    document.getElementById('historyStatus').className = 'test-status success';
+                    
+                    results.forEach(result => {
+                        const item = document.createElement('div');
+                        item.className = 'test-result-item';
+                        item.innerHTML = `<strong>${result.title || 'Sans titre'}</strong><br><small>${result.url}</small>`;
+                        resultsDiv.appendChild(item);
+                    });
+                } else {
+                    document.getElementById('historyStatus').textContent = '❌ Aucun résultat';
+                    document.getElementById('historyStatus').className = 'test-status error';
+                }
+            });
+        });
+
+        // Test 2: Signets
+        document.getElementById('bookmarkInput').addEventListener('input', (e) => {
+            const query = e.target.value.trim();
+            if (query.length === 0) {
+                document.getElementById('bookmarkResults').innerHTML = '';
+                return;
+            }
+
+            chrome.bookmarks.search(query, (results) => {
+                const resultsDiv = document.getElementById('bookmarkResults');
+                resultsDiv.innerHTML = '';
+
+                const bookmarksWithUrl = (results || []).filter(b => b.url);
+                
+                if (bookmarksWithUrl && bookmarksWithUrl.length > 0) {
+                    document.getElementById('bookmarkStatus').textContent = `✅ ${bookmarksWithUrl.length} signets trouvés`;
+                    document.getElementById('bookmarkStatus').className = 'test-status success';
+                    
+                    bookmarksWithUrl.forEach(result => {
+                        const item = document.createElement('div');
+                        item.className = 'test-result-item';
+                        item.innerHTML = `<strong>${result.title || 'Sans titre'}</strong><br><small>${result.url}</small>`;
+                        resultsDiv.appendChild(item);
+                    });
+                } else {
+                    document.getElementById('bookmarkStatus').textContent = '❌ Aucun signet trouvé';
+                    document.getElementById('bookmarkStatus').className = 'test-status error';
+                }
+            });
+        });
+
+        // Test 3: Icônes
+        window.addEventListener('load', () => {
+            const iconTest = document.getElementById('iconTest');
+            const urls = [
+                'https://www.google.com',
+                'https://github.com',
+                'https://www.youtube.com'
+            ];
+
+            urls.forEach(url => {
+                const container = document.createElement('div');
+                container.style.cssText = 'display: flex; align-items: center; gap: 10px; margin-bottom: 10px;';
+                
+                const img = document.createElement('img');
+                img.src = `chrome://favicon/size/32@1x/${url}`;
+                img.style.cssText = 'width: 32px; height: 32px; border-radius: 4px;';
+                
+                let loaded = false;
+                img.onerror = () => {
+                    if (!loaded) {
+                        loaded = true;
+                        img.style.display = 'none';
+                        const fallback = document.createElement('div');
+                        fallback.textContent = new URL(url).hostname.charAt(0).toUpperCase();
+                        fallback.style.cssText = 'width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #6366f1, #8b5cf6); border-radius: 4px; color: white; font-weight: bold;';
+                        container.appendChild(fallback);
+                    }
+                };
+                img.onload = () => {
+                    loaded = true;
+                };
+                
+                const label = document.createElement('span');
+                label.textContent = new URL(url).hostname;
+                
+                container.appendChild(img);
+                container.appendChild(label);
+                iconTest.appendChild(container);
+            });
+
+            document.getElementById('iconStatus').textContent = '✅ Icônes testées';
+            document.getElementById('iconStatus').className = 'test-status success';
+        });
+
+        // Test 4: Permissions
+        window.addEventListener('load', () => {
+            const permissionDiv = document.getElementById('permissionStatus');
+            let status = '<strong>Permissions détectées:</strong><br>';
+            
+            try {
+                chrome.history.search({ text: 'test', maxResults: 1 }, () => {
+                    status += '✅ history<br>';
+                });
+                status += '✅ history<br>';
+            } catch (e) {
+                status += '❌ history<br>';
+            }
+
+            try {
+                chrome.bookmarks.search('test', () => {
+                    status += '✅ bookmarks<br>';
+                });
+                status += '✅ bookmarks<br>';
+            } catch (e) {
+                status += '❌ bookmarks<br>';
+            }
+
+            try {
+                chrome.topSites.get(() => {
+                    status += '✅ topSites<br>';
+                });
+                status += '✅ topSites<br>';
+            } catch (e) {
+                status += '❌ topSites<br>';
+            }
+
+            permissionDiv.innerHTML = status;
+        });
+    </script>
+</body>
+</html>
+
