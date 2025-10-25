@@ -89,9 +89,20 @@ gmailButton.onclick = () => window.location.href = 'https://mail.google.com/mail
 - `history` - Accéder à l'historique de navigation
 - `topSites` - Afficher les sites les plus visités
 
+## Dernières mises à jour (v2.4)
+
+✅ **Corrections de bugs**
+- Correction des erreurs de console liées à `updateBgTypeUI()`
+- Ajout de vérifications de sécurité pour les éléments DOM
+- Suppression de la barre "Entrée" en bas de la barre de recherche
+
+✨ **Améliorations**
+- Interface plus propre et épurée
+- Meilleure gestion des erreurs JavaScript
+- Valeurs par défaut robustes pour les paramètres de fond d'écran
+
 ## Améliorations futures
 
-- [ ] Thème sombre/clair personnalisable
 - [ ] Synchronisation des raccourcis entre appareils
 - [ ] Intégration avec les notes/tâches
 - [ ] Widgets personnalisables
