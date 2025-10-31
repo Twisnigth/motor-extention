@@ -496,7 +496,11 @@ function setupSearchInput() {
             e.preventDefault();
             const query = searchInput.value.trim();
             if (query) {
-                window.location.href = `https://www.google.com/search?q=${encodeURIComponent(query)}`;
+                // Utiliser l'API Chrome Search pour respecter le moteur de recherche par défaut de l'utilisateur
+                chrome.search.query({
+                    text: query,
+                    disposition: 'CURRENT_TAB'
+                });
             }
         } else if (e.key === 'Escape') {
             searchResults.classList.add('hidden');
@@ -696,9 +700,10 @@ function classifySuggestion(suggestion) {
         };
     }
 
-    // Sinon, c'est une recherche Google
+    // Sinon, c'est une recherche (on stocke le texte au lieu de l'URL)
     return {
-        url: `https://www.google.com/search?q=${encodeURIComponent(suggestion)}`,
+        url: null, // Pas d'URL, on utilisera chrome.search.query()
+        searchText: suggestion, // Stocker le texte de recherche
         type: 'suggestion',
         isDirectSite: false
     };
@@ -911,10 +916,16 @@ function createResultItem(result) {
 
     const url = document.createElement('div');
     url.className = 'search-result-url';
-    try {
-        url.textContent = new URL(result.url).hostname;
-    } catch (e) {
-        url.textContent = result.url;
+    if (result.searchText) {
+        // Pour les recherches, afficher le texte de recherche
+        url.textContent = `Rechercher "${result.searchText}"`;
+    } else {
+        // Pour les URLs, afficher le hostname
+        try {
+            url.textContent = new URL(result.url).hostname;
+        } catch (e) {
+            url.textContent = result.url;
+        }
     }
 
     text.appendChild(title);
@@ -924,8 +935,8 @@ function createResultItem(result) {
     const badge = document.createElement('div');
     badge.className = 'search-result-badge';
     if (result.type === 'suggestion') {
-        // Afficher "Site" si c'est un site direct, "Google" si c'est une recherche
-        badge.textContent = result.isDirectSite ? 'Site' : 'Google';
+        // Afficher "Site" si c'est un site direct, "Recherche" si c'est une recherche
+        badge.textContent = result.isDirectSite ? 'Site' : 'Recherche';
     } else if (result.type === 'bookmark') {
         badge.textContent = 'Signet';
     } else {
@@ -938,7 +949,16 @@ function createResultItem(result) {
 
     // Clic sur le résultat
     item.addEventListener('click', () => {
-        window.location.href = result.url;
+        if (result.searchText) {
+            // Si c'est une recherche, utiliser l'API Chrome Search
+            chrome.search.query({
+                text: result.searchText,
+                disposition: 'CURRENT_TAB'
+            });
+        } else {
+            // Sinon, ouvrir l'URL directement
+            window.location.href = result.url;
+        }
     });
 
     return item;

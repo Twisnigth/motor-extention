@@ -1,13 +1,14 @@
 {
   "manifest_version": 3,
   "name": "Spotlight Search - New Tab",
-  "version": "1.0.0",
-  "description": "Une belle page de nouvel onglet avec animations Spotlight et raccourcis pratiques",
+  "version": "1.0.1",
+  "description": "Une belle page de nouvel onglet avec recherche intelligente (respecte votre moteur de recherche par défaut) et raccourcis personnalisables",
   "permissions": [
     "history",
     "topSites",
     "bookmarks",
-    "storage"
+    "storage",
+    "search"
   ],
   "host_permissions": [
     "https://suggestqueries.google.com/*",
