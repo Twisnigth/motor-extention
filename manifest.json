@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Spotlight Search - New Tab",
   "version": "1.0.1",
-  "description": "Une belle page de nouvel onglet avec recherche intelligente (respecte votre moteur de recherche par défaut) et raccourcis personnalisables",
+  "description": "Page de nouvel onglet avec recherche (respecte votre moteur par défaut), raccourcis et historique personnalisables",
   "permissions": [
     "history",
     "topSites",
